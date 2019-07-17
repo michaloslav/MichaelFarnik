@@ -1572,6 +1572,11 @@ clone-deep@^2.0.1:
     kind-of "^6.0.0"
     shallow-clone "^1.0.0"
 
+cname-webpack-plugin@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/cname-webpack-plugin/-/cname-webpack-plugin-2.0.0.tgz#99c55216de6afbf89815a6df8108b554875e9254"
+  integrity sha512-e8PX7XZmYm5I0AS0hMYsXyQbZfOt3RxNMnNpn5iWU1KctIBBsh1kjRNPnNWO1RBXD+ARvaevyXmPPfNC2GfY7g==
+
 code-point-at@^1.0.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/code-point-at/-/code-point-at-1.1.0.tgz#0d070b4d043a5bea33a2f1a40e2edb3d9a4ccf77"
