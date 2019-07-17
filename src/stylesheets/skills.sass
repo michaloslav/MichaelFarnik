@@ -1,0 +1,33 @@
+#skills.section
+  .flexContainer
+    min-height: calc(100vh - 11rem)
+    align-items: center
+
+    .subsection
+      margin: 0 2rem 1.5rem 2rem
+
+      @media (max-width: 600px)
+        width: calc(100% - 4rem)
+      
+      @media (min-width: 601px)
+        width: calc(50% - 4rem)
+        height: 100%
+
+        .list
+          min-height: calc(100vh - 11rem)
+
+
+      .subsectionTitle
+        text-align: center
+        font-size: 1.15rem
+
+      .list
+        display: flex
+        align-items: center
+        align-content: space-around
+        flex-wrap: wrap
+
+        .item
+          width: 100%
+          margin-top: .5rem
+          margin-bottom: 1.5rem

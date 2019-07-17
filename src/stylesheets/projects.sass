@@ -1,0 +1,141 @@
+#projects.section
+  background-color: #eee
+
+  .project
+    color: white
+    margin: 1rem
+    padding: 1rem
+    position: relative
+    border-radius: .5rem
+    flex-grow: 1
+
+    @media (max-width: 900px)
+      width: calc(100% - 2rem)
+      min-height: 12.5rem
+    
+    @media (min-width: 901px)
+      width: calc(50% - 4rem)
+      min-height: 20rem
+
+    &#MYT 
+      .background
+        background-image: url('../images/MYT.png')
+
+      .gradient
+        background: linear-gradient(#0e0e0eab, #00000087)
+
+    &#Pribehy 
+      .background
+        background-image: url('../images/Pribehy.png')
+
+      .gradient
+        background: linear-gradient(#00000094, #00000057)
+
+    &#GrabWikiData 
+      .background
+        background-image: url('../images/GrabWikiData.png')
+
+      .gradient
+        background: linear-gradient(#00000075, #0000008f)
+
+    &#thisWebsite 
+      .background
+        background-image: linear-gradient(135deg, #a4a705, #0ab569, #0d6688, #5611d4)
+        background-size: 400% 400%
+        animation: GradientPosition 10s cubic-bezier(1, .2, 0.2, 1) infinite
+
+      .gradient
+        background: linear-gradient(#00000012, #0000003d)
+    
+    .backgroundContainer
+      position: absolute
+      top: 0
+      left: 0
+      height: 100%
+      width: 100%
+      overflow: hidden
+
+      .background, .gradient
+        position: absolute
+        filter: blur(3px)
+
+      .background
+        top: -3px
+        right: -3px
+        bottom: -3px
+        left: -3px
+        background-repeat: no-repeat
+        background-size: cover
+        background-position: top center
+
+      .gradient
+        top: 0
+        left: 0
+        height: 100%
+        width: 100%
+        z-index: 1
+
+    .title, .description
+      position: relative
+      z-index: 100
+    
+    .title, .description, .links
+      z-index: 100
+
+    .title
+      font-size: 1.25rem
+      margin-bottom: 1rem
+      text-align: center
+
+    .description
+      font-size: .95rem
+
+    .links
+      position: absolute
+      width: 100%
+      bottom: 2rem
+      left: 0
+      display: flex
+      justify-content: space-around
+      flex-wrap: wrap
+
+      .linkContainer
+        text-align: center
+        white-space: nowrap
+
+        a
+          color: white
+          text-decoration: none
+          border: 4px solid #3cf7eee3
+          border-radius: 2.5rem
+          padding: .8rem
+          margin: 1rem
+          text-transform: uppercase
+          font-size: .9rem
+
+          @media (min-width: 401px) and (max-width: 500px)
+            margin: 1rem 0
+
+
+@media (max-width: 400px)
+  #projects.section .project .links .linkContainer
+    width: calc(100% - 2rem)
+
+  #projects.section .project:not(.onlyOneLink)
+    .description
+      margin-bottom: 8rem
+  
+    .links .linkContainer:first-child
+      margin-bottom: 2.5rem
+
+  #projects.section .project.onlyOneLink
+    .description
+      margin-bottom: 4rem
+  
+@media (min-width: 401px)
+  #projects.section .project 
+    .description
+      margin-bottom: 5rem
+  
+    .links .linkContainer
+      width: calc(50% - 2rem)
