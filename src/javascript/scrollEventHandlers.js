@@ -18,7 +18,7 @@ export function wheelEventHandler(event){
 export function scrollEventHandler(event, initializing = false){
   // if we're almost at the top, make the first downward arrow pulse
   // else stop the pulsing
-  let firstArrow = document.querySelector("#home.section .arrow.down")
+  let firstArrow = document.querySelector("#home.section .arrow")
   if(firstArrow){ // handle undefined
     if(window.pageYOffset < getSmallHeightDelta() * 2) firstArrow.classList.add("pulse")
     else firstArrow.classList.remove("pulse")
