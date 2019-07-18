@@ -6,6 +6,8 @@ import "../stylesheets/skills.sass"
 import "../stylesheets/projects.sass"
 import "../stylesheets/about.sass"
 import "../stylesheets/contact.sass"
+import "../files/resume.pdf"
+import "../files/cv-cz.pdf"
 
 // init
 document.addEventListener("DOMContentLoaded", () => {
