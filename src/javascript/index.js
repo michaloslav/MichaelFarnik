@@ -1,4 +1,4 @@
-import {scrollToElement, wheelEventHandler} from './scroll'
+import {scrollToElement, wheelEventHandler, scrollEventHandler} from './scroll'
 import {sections, getSections} from './getSections'
 import "../stylesheets/index.sass"
 import "../stylesheets/home.sass"
@@ -25,8 +25,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // scrolling - prevent default on desktop, instead move to the next section; preserve native behavior on mobile
   // (ensure browser compatibility)
-  //window.addEventListener("DOMMouseScroll", scrollEventHandler, false)
   document.addEventListener("wheel", wheelEventHandler, {passive: false})
   window.onwheel = wheelEventHandler
   window.onmousewheel  = wheelEventHandler
+
+  // handles all scrolling - desktop, mobile and programmatic
+  window.addEventListener("scroll", scrollEventHandler, {capture: true, passive: true})
 })

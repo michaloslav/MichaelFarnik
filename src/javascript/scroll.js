@@ -23,7 +23,7 @@ let browserSupportsScrollOptionsObject = (
 )()
 
 function getSmallHeightDelta(){
-  return window.innerWidth / 5
+  return window.innerHeight / 5
 }
 
 // determines which sections you're currently in (returns its index in the sections global variable)
@@ -148,3 +148,14 @@ export function wheelEventHandler(event){
   if(event.deltaY > 0) scrollToNextSection(event, currentSectionIndex)
   else scrollToPreviousSection(event, currentSectionIndex)
 }
+
+export function scrollEventHandler(event){
+  // if we're almost at the top, make the first downward arrow pulse
+  let firstArrow = document.querySelector("#home.section .down")
+  if(window.pageYOffset < getSmallHeightDelta() * 3) firstArrow.classList.add("pulse")
+  // else stop the pulsing
+  else firstArrow.classList.remove("pulse")
+}
+
+// init all the things determined by the scroll handler
+scrollEventHandler()
