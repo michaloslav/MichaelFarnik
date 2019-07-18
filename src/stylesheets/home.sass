@@ -13,9 +13,13 @@
     .name
       font-size: 2rem
 
-  .down.pulse svg
-    animation: Pulse 1s 1.25s cubic-bezier(0.4, 0, 0.6, 1) infinite
-    transition: transform .5s
+  .arrow
+    &.up svg path:first-child
+      fill: gray
+
+    &.down.pulse svg
+      animation: Pulse 1s 1.25s cubic-bezier(0.4, 0, 0.6, 1) infinite
+      transition: transform .5s
 
 @keyframes Pulse
   0%

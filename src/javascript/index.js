@@ -1,5 +1,5 @@
-import {scrollToElement, wheelEventHandler, scrollEventHandler} from './scroll'
-import {sections, getSections} from './getSections'
+import {wheelEventHandler, scrollEventHandler} from './scrollEventHandlers'
+import {getSections} from './getSections'
 import "../stylesheets/index.sass"
 import "../stylesheets/home.sass"
 import "../stylesheets/skills.sass"
@@ -11,17 +11,8 @@ import "../stylesheets/contact.sass"
 document.addEventListener("DOMContentLoaded", () => {
   getSections()
 
-  // attach event listeners to the downward arrows
-  sections.forEach(({selector}, i) => {
-    // if this is the last section, there won't be another downward arrow -> return
-    if(i === sections.length - 1) return
-
-    let nextSectionSelector = sections[i + 1].selector
-    let arrow = document.querySelector(`${selector} .down svg`)
-    
-    // check if the section has an arrow to begin with
-    if(arrow) arrow.addEventListener("click", () => scrollToElement(nextSectionSelector))
-  })
+  // init all the things determined by the scroll handler
+  scrollEventHandler(null, true)
 
   // scrolling - prevent default on desktop, instead move to the next section; preserve native behavior on mobile
   // (ensure browser compatibility)

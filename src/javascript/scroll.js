@@ -1,33 +1,13 @@
-import {sections, getSections, windowWidthWhenSettingSections} from './getSections'
+import {sections} from './getSections'
+import {scrollToDestination, scrollToElement} from './scrollCore'
 
-// temp globals
-let canScrollFurther = true
-
-// determine if the browser supports window.scroll options
-let browserSupportsScrollOptionsObject = (
-  () => {
-    let supports = false
-    try{
-      let div = document.createElement("div")
-      div.scrollTo({
-        top: 0,
-        get behavior(){
-          supports = true
-          return "smooth"
-        }
-      })
-    }
-    catch(e){}
-    return supports
-  }
-)()
-
-function getSmallHeightDelta(){
+// basic unit of height used in comparisons
+export function getSmallHeightDelta(){
   return window.innerHeight / 5
 }
 
 // determines which sections you're currently in (returns its index in the sections global variable)
-function getCurrentSectionIndex(){
+export function getCurrentSectionIndex(){
   let windowOffset = window.pageYOffset || document.documentElement.scrollTop
   for(let [index, section] of sections.entries()){
     let sectionOffset = section.top
@@ -47,32 +27,37 @@ function getCurrentSectionIndex(){
   return sections.length - 1
 }
 
-function scrollToDestination(destination = window.pageYOffset){
-  let options = {top: destination, left: 0, behavior: "smooth"}
-
-  if(browserSupportsScrollOptionsObject) window.scroll(options)
-  else window.scroll(...Object.values(options))
-}
-
-// scrolling funcs
-export function scrollToElement(selector, toBottom = false){
-  let element = document.querySelector(selector)
-  let topOfElement = element.offsetTop
-  let destination
-  if(toBottom){
-    // if we're scrolling to the bottom of the element, we need to align the bottom of the element with the bottom of the viewport
-    let bottomOfElement = topOfElement + element.offsetHeight
-    destination = bottomOfElement - window.innerHeight
+export function scrollToNextSection(currentSectionIndex){
+  // the first argument passed to this function might be an event in some cases, in which case we need to override it
+  if(typeof currentSectionIndex !== "number"){
+    currentSectionIndex = getCurrentSectionIndex()
   }
-  else destination = topOfElement
-  scrollToDestination(destination)
 
-  // used with a timeout to prevent accidentally scrolling multiple times
-  canScrollFurther = false
-  setTimeout(() => canScrollFurther = true, 100)
+  // if this is the last section, don't do anything
+  if(currentSectionIndex >= sections.length - 1) return
+
+  let newSectionIndex = currentSectionIndex + 1
+  
+  scrollToElement(sections[newSectionIndex].selector)
 }
 
-function scrollToNextSection(event, currentSectionIndex){
+export function scrollToPreviousSection(currentSectionIndex){
+  // the first argument passed to this function might be an event in some cases, in which case we need to override it
+  if(typeof currentSectionIndex !== "number"){
+    currentSectionIndex = getCurrentSectionIndex()
+  }
+
+  // if this is the first section, don't do anything
+  if(currentSectionIndex <= 0) return
+
+  let newSectionIndex = currentSectionIndex - 1
+
+  scrollToElement(sections[newSectionIndex].selector, true)
+}
+
+export function scrollDown(){
+  let currentSectionIndex = getCurrentSectionIndex()
+
   // if the user doesn't see the bottom of the current section yet, scroll down one viewport
   // else, scroll to the next section
   let sectionBottom = sections[currentSectionIndex].bottom
@@ -82,18 +67,12 @@ function scrollToNextSection(event, currentSectionIndex){
   if(sectionBottom - getSmallHeightDelta() > windowBottom){
     scrollDownWithinASection(currentSectionIndex, sectionBottom, windowBottom)
   }
-
-  else{
-    // if this is the last section, don't do anything
-    if(currentSectionIndex >= sections.length - 1) return
-  
-    let newSectionIndex = currentSectionIndex + 1
-    
-    scrollToElement(sections[newSectionIndex].selector)
-  }
+  else scrollToNextSection(currentSectionIndex)
 }
 
-function scrollToPreviousSection(event, currentSectionIndex){
+export function scrollUp(){
+  let currentSectionIndex = getCurrentSectionIndex()
+
   // if the user doesn't see the top of the current section yet, scroll up one viewport
   // else, scroll to the previous section
   let sectionTop = sections[currentSectionIndex].top
@@ -101,15 +80,7 @@ function scrollToPreviousSection(event, currentSectionIndex){
   if(sectionTop + getSmallHeightDelta() < windowTop){
     scrollUpWithinASection(currentSectionIndex, sectionTop, windowTop)
   }
-
-  else{
-    // if this is the first section, don't do anything
-    if(currentSectionIndex <= 0) return
-
-    let newSectionIndex = currentSectionIndex - 1
-
-    scrollToElement(sections[newSectionIndex].selector, true)
-  }
+  else scrollToPreviousSection(currentSectionIndex)
 }
 
 function scrollUpWithinASection(currentSectionIndex, currentSectionTop, currentViewportTop){
@@ -134,28 +105,3 @@ function scrollDownWithinASection(currentSectionIndex, currentSectionBottom, cur
   }
 }
 
-export function wheelEventHandler(event){
-  event.preventDefault()
-
-  // if the user just scrolled to another section, we don't want to accidentally trigger another scroll right away
-  if(!canScrollFurther) return
-
-  // if the window width has changed since we got the sections global, get them again
-  if(window.innerWidth !== windowWidthWhenSettingSections) getSections()
-
-  let currentSectionIndex = getCurrentSectionIndex()
-
-  if(event.deltaY > 0) scrollToNextSection(event, currentSectionIndex)
-  else scrollToPreviousSection(event, currentSectionIndex)
-}
-
-export function scrollEventHandler(event){
-  // if we're almost at the top, make the first downward arrow pulse
-  let firstArrow = document.querySelector("#home.section .down")
-  if(window.pageYOffset < getSmallHeightDelta() * 3) firstArrow.classList.add("pulse")
-  // else stop the pulsing
-  else firstArrow.classList.remove("pulse")
-}
-
-// init all the things determined by the scroll handler
-scrollEventHandler()

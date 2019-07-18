@@ -34,17 +34,32 @@ body
     flex-wrap: wrap
     align-items: center
     
-  .down
+  .arrow
     z-index: 100
     position: absolute
-    bottom: 0
     left: 0
     text-align: center
     width: 100%
+    transition: bottom 1s
 
     svg
       cursor: pointer
-      transform: scale(1.5)
+      transition: transform 1s
+
+      path
+        transition: fill 1s
+
+    &.down
+      bottom: 0
+
+      svg
+        transform: scale(1.5)
+
+    &.up
+      bottom: calc(-24px - 1rem)
+
+      svg
+        transform: scale(1, -1)
 
 .sectionTitle
   text-align: center
