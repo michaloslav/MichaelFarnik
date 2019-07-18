@@ -3,6 +3,29 @@ import {sections, getSections, windowWidthWhenSettingSections} from './getSectio
 // temp globals
 let canScrollFurther = true
 
+// determine if the browser supports window.scroll options
+let browserSupportsScrollOptionsObject = (
+  () => {
+    let supports = false
+    try{
+      let div = document.createElement("div")
+      div.scrollTo({
+        top: 0,
+        get behavior(){
+          supports = true
+          return "smooth"
+        }
+      })
+    }
+    catch(e){}
+    return supports
+  }
+)()
+
+function getSmallHeightDelta(){
+  return window.innerWidth / 5
+}
+
 // determines which sections you're currently in (returns its index in the sections global variable)
 function getCurrentSectionIndex(){
   let windowOffset = window.pageYOffset || document.documentElement.scrollTop
@@ -10,7 +33,7 @@ function getCurrentSectionIndex(){
     let sectionOffset = section.top
 
     // if the sectionOffset is greater than the windowOffset, that means we looped one too far and the index is the current one minus one
-    if(sectionOffset - 25 >= windowOffset){
+    if(sectionOffset - getSmallHeightDelta() >= windowOffset){
       // however, if only the very bottom of a certain section is taking up the top of the screen,...
       // we should instead use the one occupying the majority of the screen
       let previousSectionBottom = sections[index - 1].bottom
@@ -24,6 +47,13 @@ function getCurrentSectionIndex(){
   return sections.length - 1
 }
 
+function scrollToDestination(destination = window.pageYOffset){
+  let options = {top: destination, left: 0, behavior: "smooth"}
+
+  if(browserSupportsScrollOptionsObject) window.scroll(options)
+  else window.scroll(...Object.values(options))
+}
+
 // scrolling funcs
 export function scrollToElement(selector, toBottom = false){
   let element = document.querySelector(selector)
@@ -35,7 +65,7 @@ export function scrollToElement(selector, toBottom = false){
     destination = bottomOfElement - window.innerHeight
   }
   else destination = topOfElement
-  window.scroll({top: destination, behavior: "smooth"})
+  scrollToDestination(destination)
 
   // used with a timeout to prevent accidentally scrolling multiple times
   canScrollFurther = false
@@ -49,7 +79,7 @@ function scrollToNextSection(event, currentSectionIndex){
   let windowTop = window.pageYOffset || document.documentElement.scrollTop
   let windowBottom = windowTop + window.innerHeight
 
-  if(sectionBottom - 25 > windowBottom){
+  if(sectionBottom - getSmallHeightDelta() > windowBottom){
     scrollDownWithinASection(currentSectionIndex, sectionBottom, windowBottom)
   }
 
@@ -68,7 +98,7 @@ function scrollToPreviousSection(event, currentSectionIndex){
   // else, scroll to the previous section
   let sectionTop = sections[currentSectionIndex].top
   let windowTop = window.pageYOffset || document.documentElement.scrollTop
-  if(sectionTop + 25 < windowTop){
+  if(sectionTop + getSmallHeightDelta() < windowTop){
     scrollUpWithinASection(currentSectionIndex, sectionTop, windowTop)
   }
 
@@ -89,7 +119,7 @@ function scrollUpWithinASection(currentSectionIndex, currentSectionTop, currentV
   }
   else{
     let destination = currentViewportTop - window.innerHeight
-    window.scroll({top: destination, behavior: "smooth"})
+    scrollToDestination(destination)
   }
 
 }
@@ -100,7 +130,7 @@ function scrollDownWithinASection(currentSectionIndex, currentSectionBottom, cur
     scrollToElement(sections[currentSectionIndex].selector, true)
   }
   else{
-    window.scroll({top: currentViewportBottom, behavior: "smooth"})
+    scrollToDestination(currentViewportBottom)
   }
 }
 
