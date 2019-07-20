@@ -6,12 +6,23 @@
     background-size: 200% 200%
     animation: GradientPosition 3s ease infinite
 
-  .container 
-    .content hr
-      min-width: 17.5rem
+  .container
+    display: flex
+    align-items: center
+    justify-content: center
+    min-height: calc(100vh - 4rem)
+    height: 100%
+
+    .content
+      text-align: center
+      color: white
+      z-index: 10
+
+      hr
+        min-width: 17.5rem
     
-    .name
-      font-size: 2rem
+      .name
+        font-size: 2rem
 
   .arrow
     &.up svg path:first-child
