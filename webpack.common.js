@@ -7,9 +7,13 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin')
 const autoprefixer = require("autoprefixer")
 
 module.exports = {
-  entry: "./src/javascript/index.js",
+  entry: {
+    preloadPolyfill: "./src/javascript/polyfills/preloadPolyfillScript.js",
+    main: "./src/javascript/index.js"
+  },
   output: {
-    filename: "main.js",
+    filename: "[name].bundle.js",
+    chunkFilename: "[name].bundle.js",
     path: path.resolve(__dirname, "dist")
   },
   plugins: [
@@ -68,7 +72,9 @@ module.exports = {
         exclude: /node_modules/,
         loader: "babel-loader",
         query: {
-          presets: ["@babel/preset-env"]
+          presets: [
+            "@babel/preset-env"
+          ]
         }
       },
       {

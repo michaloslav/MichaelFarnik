@@ -1,8 +1,10 @@
+
+
 // temp globals
 export let canScrollFurther = true
 
 // determine if the browser supports window.scroll options
-let browserSupportsScrollOptionsObject = (
+/*let browserSupportsScrollOptionsObject = (
   () => {
     let supports = false
     try{
@@ -18,15 +20,13 @@ let browserSupportsScrollOptionsObject = (
     catch(e){}
     return supports
   }
-)()
-
-
+)()*/
 
 export function scrollToDestination(destination = window.pageYOffset){
   let options = {top: destination, left: 0, behavior: "smooth"}
 
-  if(browserSupportsScrollOptionsObject) window.scroll(options)
-  else window.scroll(...Object.values(options))
+  /*if(browserSupportsScrollOptionsObject) */window.scroll(options)
+  /*else window.scroll(...Object.values(options))*/
 }
 
 // scrolling funcs

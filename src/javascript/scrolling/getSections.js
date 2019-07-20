@@ -6,7 +6,11 @@ export let windowWidthWhenSettingSections = window.innerWidth
 export function getSections(){
   sections = []
 
-  let sectionElements = [...document.getElementsByClassName("section")]
+  let sectionElements = document.getElementsByClassName("section")
+
+  // convert the HTMLCollection to an Array
+  sectionElements = Array.from(sectionElements)
+
   sectionElements.forEach(element => {
     let {id, offsetTop, offsetHeight} = element
 

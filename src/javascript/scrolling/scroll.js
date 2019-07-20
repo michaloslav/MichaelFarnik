@@ -9,7 +9,9 @@ export function getSmallHeightDelta(){
 // determines which sections you're currently in (returns its index in the sections global variable)
 export function getCurrentSectionIndex(){
   let windowOffset = window.pageYOffset || document.documentElement.scrollTop
-  for(let [index, section] of sections.entries()){
+  for(let index = 0; index < sections.length; index++){
+    let section = sections[index]
+
     let sectionOffset = section.top
 
     // if the sectionOffset is greater than the windowOffset, that means we looped one too far and the index is the current one minus one

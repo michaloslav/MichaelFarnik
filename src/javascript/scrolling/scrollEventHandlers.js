@@ -29,7 +29,9 @@ export function scrollEventHandler(event, initializing = false){
 
   // loop through the sections, turn arrows up or down if necessary
   let centerOfWindow = window.pageYOffset + (window.innerHeight / 2)
-  for(let section of sections){
+  for(let i = 0; i < sections.length; i++){
+    let section = sections[i]
+
     let arrow = document.querySelector(`${section.selector} .arrow`)
     if(!arrow) continue
 
