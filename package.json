@@ -6,6 +6,9 @@
   "scripts": {
     "start": "webpack-dev-server --open --config webpack.dev.js",
     "test": "jest",
+    "test:gui": "majestic",
+    "test:debug-brk": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand",
+    "test:debug": "node --inspect ./node_modules/jest/bin/jest.js --runInBand",
     "cypress": "npx cypress open",
     "cypress:run": "npx cypress run",
     "build": "webpack --config webpack.prod.js",
@@ -14,6 +17,18 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "jest": {
+    "transform": {
+      ".js$": "babel-jest"
+    },
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "src"
+    ]
+  },
   "devDependencies": {
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",

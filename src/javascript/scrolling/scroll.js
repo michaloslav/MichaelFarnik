@@ -1,9 +1,39 @@
 import {sections} from './getSections'
-import {scrollToDestination, scrollToElement} from './scrollCore'
+
+// temp globals
+export let canScrollFurther = true
+
+// scrolling core funcs
+export function scrollToDestination(destination = window.pageYOffset){
+  // if we're already at the destination, there's no need to scroll
+  if(destination === window.pageYOffset) return
+
+  let options = {top: destination, left: 0, behavior: "smooth"}
+  window.scroll(options)
+}
+
+export function scrollToElement(selector, toBottom = false){
+  let element = document.querySelector(selector)
+  if(!element) return // handle an invalid selector
+
+  let topOfElement = element.offsetTop
+  let destination
+  if(toBottom){
+    // if we're scrolling to the bottom of the element, we need to align the bottom of the element with the bottom of the viewport
+    let bottomOfElement = topOfElement + element.offsetHeight
+    destination = bottomOfElement - window.innerHeight
+  }
+  else destination = topOfElement
+  scrollToDestination(destination)
+
+  // used with a timeout to prevent accidentally scrolling multiple times
+  canScrollFurther = false
+  setTimeout(() => canScrollFurther = true, 100)
+}
 
 // basic unit of height used in comparisons
 export function getSmallHeightDelta(){
-  return window.innerHeight / 5
+  return window.innerHeight / 12
 }
 
 // determines which sections you're currently in (returns its index in the sections global variable)
@@ -15,7 +45,7 @@ export function getCurrentSectionIndex(){
     let sectionOffset = section.top
 
     // if the sectionOffset is greater than the windowOffset, that means we looped one too far and the index is the current one minus one
-    if(sectionOffset - getSmallHeightDelta() >= windowOffset){
+    if(sectionOffset - 3 * getSmallHeightDelta() >= windowOffset){
       // however, if only the very bottom of a certain section is taking up the top of the screen,...
       // we should instead use the one occupying the majority of the screen
       let previousSectionBottom = sections[index - 1].bottom
@@ -57,35 +87,17 @@ export function scrollToPreviousSection(currentSectionIndex){
   scrollToElement(sections[newSectionIndex].selector, true)
 }
 
-export function scrollDown(){
-  let currentSectionIndex = getCurrentSectionIndex()
-
-  // if the user doesn't see the bottom of the current section yet, scroll down one viewport
-  // else, scroll to the next section
-  let sectionBottom = sections[currentSectionIndex].bottom
-  let windowTop = window.pageYOffset || document.documentElement.scrollTop
-  let windowBottom = windowTop + window.innerHeight
-
-  if(sectionBottom - getSmallHeightDelta() > windowBottom){
-    scrollDownWithinASection(currentSectionIndex, sectionBottom, windowBottom)
+export function scrollDownWithinASection(currentSectionIndex, currentSectionBottom, currentViewportBottom){
+  // scroll down by either window.innerHeight or to the bottom of the section, whichever is smaller
+  if(currentSectionBottom - currentViewportBottom < window.innerHeight){
+    scrollToElement(sections[currentSectionIndex].selector, true)
   }
-  else scrollToNextSection(currentSectionIndex)
+  else{
+    scrollToDestination(currentViewportBottom)
+  }
 }
 
-export function scrollUp(){
-  let currentSectionIndex = getCurrentSectionIndex()
-
-  // if the user doesn't see the top of the current section yet, scroll up one viewport
-  // else, scroll to the previous section
-  let sectionTop = sections[currentSectionIndex].top
-  let windowTop = window.pageYOffset || document.documentElement.scrollTop
-  if(sectionTop + getSmallHeightDelta() < windowTop){
-    scrollUpWithinASection(currentSectionIndex, sectionTop, windowTop)
-  }
-  else scrollToPreviousSection(currentSectionIndex)
-}
-
-function scrollUpWithinASection(currentSectionIndex, currentSectionTop, currentViewportTop){
+export function scrollUpWithinASection(currentSectionIndex, currentSectionTop, currentViewportTop){
   // scroll up by either window.innerHeight or to the top of the section, whichever is smaller
   if(currentViewportTop - currentSectionTop < window.innerHeight){
     scrollToElement(sections[currentSectionIndex].selector)
@@ -94,16 +106,41 @@ function scrollUpWithinASection(currentSectionIndex, currentSectionTop, currentV
     let destination = currentViewportTop - window.innerHeight
     scrollToDestination(destination)
   }
-
 }
 
-function scrollDownWithinASection(currentSectionIndex, currentSectionBottom, currentViewportBottom){
-  // scroll down by either window.innerHeight or to the bottom of the section, whichever is smaller
-  if(currentSectionBottom - currentViewportBottom < window.innerHeight){
-    scrollToElement(sections[currentSectionIndex].selector, true)
+export function scrollDown(){
+  let currentSectionIndex = getCurrentSectionIndex()
+
+  // if the user doesn't see the bottom of the current section yet, scroll down by 100vh
+  // else, scroll to the next section
+  // (if we're in the last section though, always call scrollDownWithinASection because there is no next section)
+  let sectionBottom = sections[currentSectionIndex].bottom
+  let windowTop = window.pageYOffset || document.documentElement.scrollTop
+  let windowBottom = windowTop + window.innerHeight
+
+  if(
+    sectionBottom - getSmallHeightDelta() > windowBottom ||
+    currentSectionIndex >= sections.length - 1
+  ){
+    scrollDownWithinASection(currentSectionIndex, sectionBottom, windowBottom)
   }
-  else{
-    scrollToDestination(currentViewportBottom)
+  else scrollToNextSection(currentSectionIndex)
+}
+
+export function scrollUp(){
+  let currentSectionIndex = getCurrentSectionIndex()
+
+  // if the user doesn't see the top of the current section yet, scroll up by 100vh
+  // else, scroll to the previous section
+  // (if we're in the first section though, always call scrollUpWithinASection because there is no previous section)
+  let sectionTop = sections[currentSectionIndex].top
+  let windowTop = window.pageYOffset || document.documentElement.scrollTop
+  if(
+    sectionTop + getSmallHeightDelta() < windowTop ||
+    currentSectionIndex === 0
+  ){
+    scrollUpWithinASection(currentSectionIndex, sectionTop, windowTop)
   }
+  else scrollToPreviousSection(currentSectionIndex)
 }
 

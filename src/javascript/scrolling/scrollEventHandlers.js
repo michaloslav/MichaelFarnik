@@ -1,12 +1,11 @@
-import {getSmallHeightDelta, scrollDown, scrollUp, scrollToNextSection, scrollToPreviousSection} from './scroll'
-import {canScrollFurther} from './scrollCore'
+import {canScrollFurther, getSmallHeightDelta, scrollDown, scrollUp, scrollToNextSection, scrollToPreviousSection} from './scroll'
 import {sections, getSections, windowWidthWhenSettingSections} from './getSections'
 
 export function wheelEventHandler(event){
   event.preventDefault()
 
   // if the user just scrolled to another section, we don't want to accidentally trigger another scroll right away
-  if(!canScrollFurther) return
+  if(!canScrollFurther && process.env.NODE_ENV !== "test") return
 
   // if the window width has changed since we got the sections global, get them again
   if(window.innerWidth !== windowWidthWhenSettingSections) getSections()
@@ -20,7 +19,7 @@ export function scrollEventHandler(event, initializing = false){
   // else stop the pulsing
   let firstArrow = document.querySelector("#home.section .arrow")
   if(firstArrow){ // handle undefined
-    if(window.pageYOffset < getSmallHeightDelta() * 2) firstArrow.classList.add("pulse")
+    if(window.pageYOffset < 5 * getSmallHeightDelta()) firstArrow.classList.add("pulse")
     else firstArrow.classList.remove("pulse")
   }
 
@@ -35,6 +34,8 @@ export function scrollEventHandler(event, initializing = false){
     let arrow = document.querySelector(`${section.selector} .arrow`)
     if(!arrow) continue
 
+    let svg = arrow.children[0]
+
     if(centerOfWindow > section.bottom){
       // if the class is already set correctly, continue
       if(arrow.classList.contains("up") && !initializing) continue
@@ -44,8 +45,8 @@ export function scrollEventHandler(event, initializing = false){
       arrow.classList.add("up")
 
       // update the event listener
-      arrow.removeEventListener("click", scrollToNextSection)
-      arrow.addEventListener("click", scrollToPreviousSection)
+      svg.removeEventListener("click", scrollToNextSection)
+      svg.addEventListener("click", scrollToPreviousSection)
     }
     else{
       // if the class is already set correctly, continue
@@ -56,8 +57,8 @@ export function scrollEventHandler(event, initializing = false){
       arrow.classList.add("down")
 
       // update the event listener
-      arrow.removeEventListener("click", scrollToPreviousSection)
-      arrow.addEventListener("click", scrollToNextSection)
+      svg.removeEventListener("click", scrollToPreviousSection)
+      svg.addEventListener("click", scrollToNextSection)
     }
   }
 }

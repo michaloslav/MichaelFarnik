@@ -1,5 +1,5 @@
 // globals
-export let sections = []
+export let sections = process.env.NODE_ENV === "test" ? require("../../../tests/mocks/sections") : []
 export let windowWidthWhenSettingSections = window.innerWidth
 
 // get all section selectors
