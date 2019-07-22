@@ -2,11 +2,6 @@ import {wheelEventHandler, scrollEventHandler} from './scrolling/scrollEventHand
 import {getSections} from './scrolling/getSections'
 import polyfills from './polyfills/polyfills'
 import "../stylesheets/index.sass"
-import "../stylesheets/home.sass"
-import "../stylesheets/skills.sass"
-import "../stylesheets/projects.sass"
-import "../stylesheets/about.sass"
-import "../stylesheets/contact.sass"
 import "../files/resume.pdf"
 import "../files/cv-cz.pdf"
 
