@@ -12,9 +12,22 @@ module.exports = {
     main: "./src/javascript/index.js"
   },
   output: {
-    filename: "[name].bundle.js",
-    chunkFilename: "[name].bundle.js",
+    filename: "[name].[contenthash].bundle.js",
+    chunkFilename: "[name].[contenthash].bundle.js",
     path: path.resolve(__dirname, "dist")
+  },
+  optimization: {
+    moduleIds: 'hashed',
+    runtimeChunk: 'single',
+    splitChunks: {
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        }
+      }
+    }
   },
   plugins: [
     new CleanWebpackPlugin(),
@@ -40,7 +53,9 @@ module.exports = {
         }
       ]
     }),
-    new MiniCssExtractPlugin(),
+    new MiniCssExtractPlugin({
+      filename: "[name].[contenthash].bundle.css"
+    }),
     new webpack.LoaderOptionsPlugin({
       options: {
         postcss: [
