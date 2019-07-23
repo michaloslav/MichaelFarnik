@@ -1,21 +1,47 @@
+$sectionHeightMargin: 7rem
+$subsectionHeightMargin: 2.65rem
+$lastSectionHeightBreakpoint1: 1440px
+$lastSectionHeightBreakpoint2: 2080px
+
 #skills.section
   .flexContainer
-    min-height: calc(100vh - 11rem)
+    min-height: calc(100vh - #{$sectionHeightMargin})
 
     .subsection
       margin: 0 2rem 1.5rem 2rem
 
       @media (max-width: 600px)
         width: calc(100% - 4rem)
+
+        .list .item
+          width: 100%
+          margin-bottom: 1rem
       
       @media (min-width: 601px)
         width: calc(50% - 4rem)
-        height: 100%
         display: flex
         flex-direction: column
 
-        .list
-          min-height: calc(100vh - 11rem)
+        &:not(:last-child) .list .item
+          width: 100%
+          margin-bottom: 1rem
+
+        &:last-child 
+          flex-grow: 1
+
+          .list
+            @media (max-width: $lastSectionHeightBreakpoint1)
+              flex-direction: column
+
+            @media (min-width: $lastSectionHeightBreakpoint1)
+              flex-direction: row
+
+            .item
+              width: auto
+              margin-left: .75rem
+              margin-right: .75rem
+              flex-grow: 1
+              text-align: center
 
 
       .subsectionTitle
@@ -29,10 +55,49 @@
         flex-wrap: wrap
 
         .item
-          width: 100%
           margin-top: .5rem
-          margin-bottom: 1.5rem
 
   .arrow
     &.up svg path:first-child
       fill: black
+
+@media (min-width: 601px)
+  #skills.section .flexContainer .subsection
+    @media (max-width: $lastSectionHeightBreakpoint1)
+      $lastSubsectionHeight: 12rem
+      &:not(:last-child)
+        min-height: calc(100% - #{$sectionHeightMargin} - #{$lastSubsectionHeight})
+
+        .list
+          min-height: calc(100vh - #{$sectionHeightMargin} - #{$lastSubsectionHeight} - 2 * #{$subsectionHeightMargin})
+
+          .item
+            margin-bottom: 1.5rem
+
+      &:last-child
+        .list
+          min-height: calc(#{$lastSubsectionHeight} - #{$subsectionHeightMargin})
+
+    @media (min-width: $lastSectionHeightBreakpoint1) and (max-width: $lastSectionHeightBreakpoint2)
+      $lastSubsectionHeight: 10rem
+      &:not(:last-child)
+        min-height: calc(100% - #{$sectionHeightMargin} - #{$lastSubsectionHeight})
+
+        .list
+          min-height: calc(100vh - #{$sectionHeightMargin} - #{$lastSubsectionHeight} - 2 * #{$subsectionHeightMargin})
+
+      &:last-child
+        .list
+          min-height: calc(#{$lastSubsectionHeight} - #{$subsectionHeightMargin})
+
+    @media (min-width: $lastSectionHeightBreakpoint2)
+      $lastSubsectionHeight: 8rem
+      &:not(:last-child)
+        min-height: calc(100% - #{$sectionHeightMargin} - #{$lastSubsectionHeight})
+
+        .list
+          min-height: calc(100vh - #{$sectionHeightMargin} - #{$lastSubsectionHeight} - 2 * #{$subsectionHeightMargin})
+
+      &:last-child
+        .list
+          min-height: calc(#{$lastSubsectionHeight} - #{$subsectionHeightMargin})
