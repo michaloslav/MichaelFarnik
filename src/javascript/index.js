@@ -1,5 +1,6 @@
 import {wheelEventHandler, scrollEventHandler} from './scrolling/scrollEventHandlers'
 import {getSections} from './scrolling/getSections'
+import lazyLoadInit from './lazyload'
 import polyfills from './polyfills/polyfills'
 import "../stylesheets/index.sass"
 import "../files/resume.pdf"
@@ -15,6 +16,7 @@ function initIfPromiseExistsElseWait(){
   if(window.Promise){
     polyfills()
       .then(() => {
+        lazyLoadInit()
         getSections()
 
         // init all the things determined by the scroll handler

@@ -1,6 +1,11 @@
 #home.section
-  background: url('../images/helloBackground.jpg') no-repeat fixed 39% 25%
+  background-repeat: no-repeat
+  background-size: fixed
+  background-position: 39% 25%
   display: flex
+
+  &:not(.dontLoad)
+    background-image: url('../images/helloBackground.jpg')
 
   & > .gradient
     background: linear-gradient(rgba(255, 255, 255, 0.16), rgba(65, 175, 170, 0.22), rgba(130, 176, 197, 0.33))

@@ -14,6 +14,25 @@
     bottom: 0
     width: 100%
 
+    #contact .links a .img
+      background-size: cover
+
+      &#GitHub:not(.dontLoad)
+        background-image: url('../images/GitHub.png')
+
+      &#LinkedIn:not(.dontLoad)
+        background-image: url('../images/LinkedIn.png')
+
+      &#Facebook:not(.dontLoad)
+        background-image: url('../images/Facebook.png')
+
+      &#Email:not(.dontLoad)
+        background-image: url('../images/Gmail.png')
+
+      &#Twitter:not(.dontLoad)
+        background-image: url('../images/Twitter.png')
+
+
     @media (max-width: 600px)
       #contact .links
         display: flex
@@ -23,7 +42,7 @@
         a
           margin: 0 .75rem
       
-          img
+          .img
             height: 32px
             width: 32px
       
@@ -35,6 +54,6 @@
         justify-content: space-evenly
         margin: 2rem 0
       
-        a img
+        a .img
           height: 48px
           width: 48px
