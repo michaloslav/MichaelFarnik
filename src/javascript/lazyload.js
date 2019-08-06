@@ -33,7 +33,7 @@ export default function intersectionObserverInit(){
       const timeout = element.classList.contains("delayFloatUp") ? 250 : 100
 
       setTimeout(() => {element.classList.add("show")}, timeout)
-    }), {rootMargin: "-20%"})
+    }), {rootMargin: "-10%"})
 
     io.observe(target)
   })
