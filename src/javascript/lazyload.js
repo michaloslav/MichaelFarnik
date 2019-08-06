@@ -1,21 +1,39 @@
-export default function lazyLoadInit(){
-  const targets = [
-    ...document.getElementsByClassName("dontLoad"),
-    ...document.querySelectorAll("img[data-src]")
-  ]
+function genericIOCallback(action){
+  return function(entries, observer){
+    entries.forEach(entry => {
+      if(entry.isIntersecting){
+        const element = entry.target
 
-  targets.forEach(target => {
-    const io = new IntersectionObserver((entries, observer) => {
-      entries.forEach(entry => {
-        if(entry.isIntersecting){
-          const element = entry.target
+        action(element)
 
-          element.classList.remove("dontLoad")
+        observer.disconnect()
+      }
+    })
+  }
+}
 
-          observer.disconnect()
-        }
-      })
-    }, {rootMargin: "20%"})
+export default function intersectionObserverInit(){
+  const targets = {
+    lazyLoad: [...document.getElementsByClassName("dontLoad")],
+    floatUp: [...document.getElementsByClassName("floatUpOnScroll")]
+  }
+
+  targets.lazyLoad.forEach(target => {
+    const io = new IntersectionObserver(genericIOCallback(element => {
+      element.classList.remove("dontLoad")
+    }), {rootMargin: "0px 0px 25% 0px"})
+
+    io.observe(target)
+  })
+
+  targets.floatUp.forEach(target => {
+    const io = new IntersectionObserver(genericIOCallback(element => {
+      element.classList.add("prepareToShow")
+
+      const timeout = element.classList.contains("delayFloatUp") ? 250 : 100
+
+      setTimeout(() => {element.classList.add("show")}, timeout)
+    }), {rootMargin: "-20%"})
 
     io.observe(target)
   })

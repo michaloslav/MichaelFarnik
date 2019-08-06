@@ -59,6 +59,18 @@ body
   font-size: 1.5rem
   margin-bottom: 1rem
 
+.floatUpOnScroll
+  &:not(.show)
+    opacity: 0
+  
+    &.prepareToShow
+      transform: translateY(25%)
+
+  &.show
+    transition: all 1s
+    opacity: 1
+    transform: translateY(0)
+
 @keyframes GradientPosition
   0% 
     background-position: 0% 50%
