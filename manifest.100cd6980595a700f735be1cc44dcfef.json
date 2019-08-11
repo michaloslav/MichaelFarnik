@@ -1,0 +1,21 @@
+{
+  "icons": [
+    {
+      "src": "icon_512x512.d45bc2c0f5bdcc01f1a9b1386e27240c.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "icon_192x192.cf13b6725da94d95a698f8c88a8140da.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    }
+  ],
+  "name": "Michael Farník",
+  "short_name": "Michael",
+  "orientation": "portrait",
+  "display": "standalone",
+  "start_url": "michaelfarnik.js.org",
+  "background_color": "#617a92",
+  "theme_color": "#617a92"
+}
